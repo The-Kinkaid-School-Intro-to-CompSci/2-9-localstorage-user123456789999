@@ -11,6 +11,9 @@ function updateColor() {
     const body = document.querySelector(`body`);
     //changing the background color of the body using the values of the sliders
     body.style.backgroundColor = `rgb(${red}, ${green}, ${blue})`;
+    localStorage.setItem(`red`, red);
+    localStorage.setItem(`green`, green);
+    localStorage.setItem(`blue`, blue);
 }
 
 function makeColorSlidersWork() {
@@ -18,7 +21,10 @@ function makeColorSlidersWork() {
     const redSlider = document.querySelector(`#red`);
     const greenSlider = document.querySelector(`#green`);
     const blueSlider = document.querySelector(`#blue`);
-
+    const body = document.querySelector(`body`);
+    if (localStorage.getItem(`red`)!==null, localStorage.getItem(`blue`)!==null, localStorage.getItem(`green`)!==null){
+        body.style.backgroundColor = `rgb(${localStorage.getItem(`red`)}, ${localStorage.getItem(`green`)}, ${localStorage.getItem(`blue`)})`;
+    }
     let sliders = [redSlider, greenSlider, blueSlider];
     //adding the same event listener to all sliders
     for(let slider of sliders) {
@@ -35,6 +41,7 @@ function changeLogo() {
     const logoImg = document.querySelector(`#logo`);
     //getting the image from the images folder
     logoImg.src = `./images/${logo}`;
+    localStorage.setItem(`logo`, logo);
 }
 
 function makeLogoSelectWork() {
@@ -42,10 +49,27 @@ function makeLogoSelectWork() {
     const logoSelector = document.querySelector(`#logo-selector`);
     //adding an event listener to it
     logoSelector.addEventListener(`change`, changeLogo);
+    if (localStorage.getItem(`logo`)!==null){
+        const logoImg = document.querySelector("#logo");
+        const logoFromLocalStorage = localStorage.getItem(`logo`);
+        logoImg.src = `./images/${logoFromLocalStorage}`;
+        const logoSelector = document.querySelector(`#logo-selector`);
+        logoSelector.value = logoFromLocalStorage
+    }
+    
 }
 
 function setTheUsersName() {
-
+    let nameElement = document.querySelector(`#userName`);
+    let name = null;
+    if (localStorage.getItem(`name`)!== null){
+        name=localStorage.getItem(`name`);
+    }
+    else{
+        name = prompt(`What is your name?`)
+    }
+    nameElement.textContent = name;
+    localStorage.setItem(`name`, name);
 }
 /** Part 1: Helper functions end */
 
@@ -90,7 +114,8 @@ function makeLocalStorageWork() {
 }
 
 async function runProgram() {
-
+    console.log(localStorage);
+    setTheUsersName();
     //the functions below make the interactive elements work
     makeLogoSelectWork();
     makeColorSlidersWork();
